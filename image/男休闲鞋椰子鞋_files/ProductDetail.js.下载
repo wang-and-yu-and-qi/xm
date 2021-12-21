@@ -1,0 +1,385 @@
+﻿///<reference path="../jquery-1.11.1.min.js"/>
+//主商品
+
+var app = angular.module('ProductDetailApp', []);
+app.controller('ProductDetailController', ['$scope', function ($scope) {
+    $scope.ProductDetail = Product;
+    //选中的颜色
+    $scope.ProductColor = {};
+    $scope.MinStock=MinStocks;
+    //颜色选择
+    $scope.ChangeColor = function (idx) {
+        //console.log(idx);
+        for (i = 0; i < $scope.ProductDetail.Colors.length; i++) {
+            if (i != idx) {
+                $scope.ProductDetail.Colors[i].IsSelected = false;
+            }
+            else {
+                $scope.ProductDetail.Colors[i].IsSelected = !$scope.ProductDetail.Colors[i].IsSelected;
+                $scope.ProductColor = $scope.ProductDetail.Colors[i];
+                GetShowPhoto($scope.ProductDetail.Colors[i].Path);
+            }
+        }
+        SetIsCanBuy();
+        SetComboIsCanBuy();
+        GetSelectedDec();
+    };
+    //尺寸选择
+    $scope.ChangeSize = function (_sizeName) {
+        for (i = 0; i < $scope.ProductDetail.Sizes.length; i++) {
+            if ($scope.ProductDetail.Sizes[i].SizeName != _sizeName)
+                $scope.ProductDetail.Sizes[i].IsSelected = false;
+            else
+                $scope.ProductDetail.Sizes[i].IsSelected = !$scope.ProductDetail.Sizes[i].IsSelected;
+        }
+        SetIsCanBuy();
+        SetComboIsCanBuy();
+        GetSelectedDec();
+    };
+
+
+    //选择描述
+    //<li><span class="yx">"浅花灰"</span></li>
+    $scope.SelectedDec = '';
+    $scope.SelectedDec2 = '';
+    var GetSelectedDec = function () {
+        $scope.SelectedDec = '';
+        $scope.SelectedDec2 = '';
+        for (i = 0; i < $scope.ProductDetail.Colors.length; i++) {
+            if ($scope.ProductDetail.Colors[i].IsSelected) {
+                $scope.SelectedDec += '<li class="yx"><span>"' + $scope.ProductDetail.Colors[i].ColorName + '"</span></li>';
+                $scope.SelectedDec2 += '<span class="yx" style="color: #cc0001; line-height: 28px;">"' + $scope.ProductDetail.Colors[i].ColorName + '"</span>&nbsp;';
+                break;
+            }
+        }
+        for (i = 0; i < $scope.ProductDetail.Sizes.length; i++) {
+            if ($scope.ProductDetail.Sizes[i].IsSelected) {
+                $scope.SelectedDec += '<li><span class="yx">"' + $scope.ProductDetail.Sizes[i].SizeName + '"</span></li>';
+                $scope.SelectedDec2 += '<span class="yx" style="color: #cc0001; line-height: 28px;">"' + $scope.ProductDetail.Sizes[i].SizeName + '"</span>';
+                break;
+            }
+        }
+    }
+
+    $scope.Scale = 0;//优惠比例
+
+    //取优惠比例
+    var GetScale = function () {
+        var Spread = Product.Orignial - Product.PromotionPrice;
+        $scope.Scale = (Spread / Product.Orignial * 100).toFixed(1);
+    };
+
+    //购买数量
+    $scope.BuyNum = 1;
+    $scope.SetBuyNum = function (count) {
+        $scope.BuyNum += count;
+        if ($scope.BuyNum < 0) {
+            $scope.BuyNum = 0;
+        }
+
+        if ($scope.BuyNum > $scope.MinStock) {
+            $scope.BuyNum = $scope.MinStock;
+        }
+
+        for (i = 0; i < $scope.Combo.length; i++) {
+            $scope.Combo[i].BuyNum += count;
+            $scope.Combo[i].BuyNum = $scope.Combo[i].BuyNum < 0 ? 0 : $scope.Combo[i].BuyNum;
+            $scope.Combo[i].BuyNum = $scope.Combo[i].BuyNum > $scope.MinStock ? $scope.MinStock : $scope.Combo[i].BuyNum;
+        }
+
+        $scope.GetComboTotalPrice();
+    }
+
+    //商品图片列表
+    $scope.Photos = $scope.ProductDetail.Photos;
+
+    //展示的大图
+    $scope.ShowPhoto = '';
+    var GetShowPhoto = function (path) {
+        $scope.ShowPhoto = path;
+    }
+
+    //点击颜色更换$scope.Photos
+    $scope.ChangPhotos = function (ind) {
+        $scope.Photos = $scope.ProductDetail.Colors[ind].Photos;
+        $scope.ChangShowPhoto(0);
+    }
+
+    //点击切换大图
+    $scope.ChangShowPhoto = function (ind) {
+        for (i = 0; i < $scope.Photos.length; i++) {
+            if (i != ind)
+                $scope.Photos[i].IsSelected = false;
+            else
+                $scope.Photos[i].IsSelected = true;
+        }
+
+        $scope.ShowPhoto = $scope.Photos[ind].Path;
+    }
+
+    /*是否可点击购买*/
+    $scope.IsCanBuy = false;
+    var SetIsCanBuy = function () {
+        var isSelectedColor = false;
+        var isSelectedSize = false;
+
+        for (i = 0; i < $scope.ProductDetail.Colors.length; i++) {
+            if ($scope.ProductDetail.Colors[i].IsSelected) {
+                isSelectedColor = true;
+                break;
+            }
+        }
+        for (i = 0; i < $scope.ProductDetail.Sizes.length; i++) {
+            if ($scope.ProductDetail.Sizes[i].IsSelected) {
+                isSelectedSize = true;
+                break;
+            }
+        }
+        $scope.IsCanBuy = isSelectedColor && isSelectedSize;
+    }
+
+
+    /*套餐部分*/
+    $scope.Combo = Combo;
+    //总套餐价
+    $scope.TotalPromotionPrice = $scope.ProductDetail.PromotionPrice;
+    //总市场价
+    $scope.TotalOrignial = $scope.ProductDetail.Orignial;
+    //总差价
+    $scope.TotalSpread = $scope.ProductDetail.Orignial - $scope.ProductDetail.PromotionPrice;
+    //选中的套餐数量
+    $scope.ComboNum = 0;
+    //是否显示套餐
+    $scope.IsShowCombo = true;
+    //设置选中套餐
+    $scope.SetSelectCombo = function (ind) {
+        $scope.Combo[ind].IsSelected = (!$scope.Combo[ind].IsSelected);
+        if ($scope.Combo[ind].IsSelected) {
+            $scope.ComboNum += 1;
+            SetComboSelectedDec($scope.Combo[ind]);
+        }
+        else {
+            $scope.ComboNum -= 1;
+        }
+        $scope.GetComboTotalPrice();
+        $scope.IsShowCombo = $scope.ComboNum > 0 ? true : false;
+        $scope.TotalSpread = $scope.TotalOrignial - $scope.TotalPromotionPrice;
+        SetComboIsCanBuy();
+    };
+
+    $scope.ComboIndex = 0;
+    //套餐内产品的颜色选择
+    $scope.SetComoboColorSelected = function (_pid, _colorName) {
+        var _product = [];
+        for (i = 0; i < $scope.Combo.length; i++) {
+            if ($scope.Combo[i].ProductId == _pid) {
+                _product = $scope.Combo[i];
+                break;
+            }
+        }
+        for (i = 0; i < _product.Colors.length; i++) {
+            if (_product.Colors[i].ColorName == _colorName) {
+                _product.Colors[i].IsSelected = !_product.Colors[i].IsSelected;
+                _product.Thumb = _product.Colors[i].Thumbnail;
+            }
+            else {
+                _product.Colors[i].IsSelected = false;
+            }
+        }
+        SetComboIsCanBuy();
+        SetComboSelectedDec(_product);
+    }
+
+    //套餐内产品的尺寸选择
+    $scope.SetComoboSizeSelected = function (_pid, _sizeName) {
+        var _product = [];
+        for (i = 0; i < $scope.Combo.length; i++) {
+            if ($scope.Combo[i].ProductId == _pid) {
+                _product = $scope.Combo[i];
+
+                break;
+            }
+        }
+        for (i = 0; i < _product.Sizes.length; i++) {
+            if (_product.Sizes[i].SizeName == _sizeName) {
+                //console.log(_product.Sizes[i]);
+                _product.Sizes[i].IsSelected = !_product.Sizes[i].IsSelected;
+            }
+            else {
+                _product.Sizes[i].IsSelected = false;
+            }
+        }
+        SetComboIsCanBuy();
+        SetComboSelectedDec(_product);
+    }
+
+    var SetComboSelectedDec = function (_product) {
+        //<span class="yx" style="color: #cc0001; line-height: 28px;">"浅花灰"</span>
+        _product.SelectedDec = '';
+        for (i = 0; i < _product.Colors.length; i++) {
+            if (_product.Colors[i].IsSelected) {
+                _product.SelectedDec += '<span class="yx" style="color: #cc0001; line-height: 28px;">"' + _product.Colors[i].ColorName + '"</span>&nbsp;';
+                break;
+            }
+        }
+        for (i = 0; i < _product.Sizes.length; i++) {
+            if (_product.Sizes[i].IsSelected) {
+                _product.SelectedDec += '<span class="yx" style="color: #cc0001; line-height: 28px;">"' + _product.Sizes[i].SizeName + '"</span>';
+                break;
+            }
+        }
+    }
+
+    //设置套餐内产品购买数量
+    $scope.SetComboBuyNum = function (_pid, count) {
+        var _product = [];
+        for (i = 0; i < $scope.Combo.length; i++) {
+            if ($scope.Combo[i].ProductId == _pid) {
+                _product = $scope.Combo[i];
+                break;
+            }
+        }
+        _product.BuyNum += count;
+        _product.BuyNum = _product.BuyNum < 0 ? 0 : _product.BuyNum;
+        _product.BuyNum = _product.BuyNum > _product.Stock ? _product.Stock : _product.BuyNum;
+        $scope.GetComboTotalPrice();
+    }
+
+    //是否显示套餐上下切换按钮
+    $scope.IShowTabNavGroups = $scope.Combo.length > 3 ? true : false;
+    //套餐取消
+    $scope.ComboCancel = function () {
+        $scope.IsShowCombo = false;
+        for (i = 0; i < $scope.Combo.length; i++) {
+            $scope.Combo[i].IsSelected = false;
+        }
+        huidiao();
+        $scope.GetComboTotalPrice();
+    };
+    //套餐总价
+    $scope.ComboConfirm = function () {
+        $scope.IsShowCombo = false;
+    };
+    $scope.GetComboTotalPrice = function () {
+        $scope.TotalPromotionPrice = $scope.ProductDetail.PromotionPrice * $scope.BuyNum;
+        $scope.TotalOrignial = $scope.ProductDetail.Orignial * $scope.BuyNum;
+        for (i = 0; i < $scope.Combo.length; i++) {
+            if ($scope.Combo[i].IsSelected) {
+                $scope.TotalPromotionPrice += $scope.Combo[i].PromotionPrice * $scope.Combo[i].BuyNum;
+                $scope.TotalOrignial += $scope.Combo[i].Orignial * $scope.Combo[i].BuyNum;
+                $scope.TotalSpread = $scope.TotalOrignial - $scope.TotalPromotionPrice;
+            }
+        }
+    };
+
+    //设置套餐是否可购买
+    $scope.ComboIsCanBuy = false;
+
+    var SetComboIsCanBuy = function () {
+        var flag = true;
+        for (i = 0; i < $scope.Combo.length; i++) {
+            if ($scope.Combo[i].IsSelected) {
+                var flagColor = false;
+                var flagSize = false;
+                for (j = 0; j < $scope.Combo[i].Colors.length; j++) {
+                    if ($scope.Combo[i].Colors[j].IsSelected) {
+                        flagColor = true;
+                        break;
+                    }
+                }
+                for (j = 0; j < $scope.Combo[i].Sizes.length; j++) {
+                    if ($scope.Combo[i].Sizes[j].IsSelected) {
+                        flagSize = true;
+                        break;
+                    }
+                }
+                flag = flag && flagColor && flagSize;
+            }
+        }
+        $scope.ComboIsCanBuy = flag && $scope.IsCanBuy;
+        //console.log($scope.ComboIsCanBuy)
+    };
+
+    //初始化操作
+    GetShowPhoto($scope.ProductDetail.Path);
+    GetScale();
+    GetSelectedDec();
+}]).filter(
+    'to_trusted', ['$sce', function ($sce) {
+        return function (text) {
+            return $sce.trustAsHtml(text);
+        }
+    }]
+);
+
+
+$(function () {
+    $('.tab-nav-groups').each(function () {
+        //var comboCount = Combo.length;
+        var comboCount = $('.tab-pannel-groups').children().length;
+        //console.log(comboCount);
+        var container = $('.tm-combo-items').find('div').eq(0);
+        var rollHeight = 180;
+        //console.log(container.html());
+        var rowCount = parseInt(comboCount / 3) + (comboCount % 3 > 0 ? 1 : 0);
+        container.css('height', (rollHeight * rowCount) + 'px');
+        container.children().eq(0).css('height', (rollHeight * rowCount) + 'px');
+        var currentIdx = 0;
+        //console.log(rowCount);
+        if (rowCount > 1) {
+            $(this).find('.trigger-next').click(function () {
+                if ($(this).hasClass('disabled')) return false;
+                if (currentIdx < rowCount) {
+                    container.stop().animate({ marginTop: (0 - (rollHeight * (currentIdx + 1))) + 'px' }, 200);
+                    currentIdx += 1;
+                    if (currentIdx > 0) {
+                        $(this).parent().find('.trigger-prev').removeClass('disabled');
+
+                    }
+                    if (currentIdx >= rowCount - 1) {
+                        $(this).addClass('disabled');
+                    }
+
+                }
+            });
+            $(this).find('.trigger-prev').click(function () {
+                if ($(this).hasClass('disabled')) return false;
+                if (currentIdx > 0) {
+                    //console.log(currentIdx - 1);
+                    var containerMarginTop = parseInt(container.css('margin-top').replace('px', ''));
+                    var nowMarginTop = containerMarginTop + rollHeight;
+                    container.stop().animate({ marginTop: nowMarginTop + 'px' }, 200);
+                    currentIdx -= 1;
+                    if (currentIdx <= 0) {
+                        $(this).addClass('disabled');
+                    }
+                    if (currentIdx < rowCount - 1) {
+                        $(this).parent().find('.trigger-next').removeClass('disabled');
+                    }
+
+                }
+            });
+        }
+    });
+
+    //评论小图点击功能
+    $('.tm-m-photos-thumb').each(function () {
+        $(this).find('li').click(function () {
+            $li = $(this);
+            if (!$li.hasClass('tm-current')) {
+                $li.addClass('tm-current').siblings().removeClass('tm-current');
+                $li.parent().parent().find('.tm-m-photo-viewer').show().stop().animate({ 'width': '300px', 'height': '300px' }, 200);
+                $li.parent().parent().find('.tm-m-photo-viewer').find('img').attr('src', $li.data('src'));
+                $li.parent().parent().find('.tm-m-photo-viewer').find('img').css({'width': '300px', 'height': '300px'});
+            }
+            else {
+                $li.removeClass('tm-current');
+                $li.parent().parent().find('.tm-m-photo-viewer').hide(200);
+            }
+
+
+        });
+    });
+
+
+});

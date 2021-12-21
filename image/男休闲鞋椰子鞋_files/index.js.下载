@@ -1,0 +1,70 @@
+﻿
+
+//第一部分tab选项卡切换
+$(function () {
+    $(".tabcon .tab li").mouseover(function () {
+        $(this).addClass('active').siblings().removeClass('active');
+        var index = $(this).index();
+        number = index;
+        $('.tcon .timg').hide();
+        $('.tcon .timg:eq(' + index + ')').show();
+    });
+
+    var auto = 1;  //等于1则自动切换，其他任意数字则不自动切换
+    if (auto == 1) {
+        var number = 0;
+        var maxNumber = $('.tabcon .tab li').length;
+        function autotab() {
+            number++;
+            number == maxNumber ? number = 0 : number;
+            $('.tabcon .tab li:eq(' + number + ')').addClass('active').siblings().removeClass('active');
+            $('.tcon .timg:eq(' + number + ')').show().siblings().hide();
+        }
+        var tabChange = setInterval(autotab, 3000);
+        //鼠标悬停暂停切换
+        $('.tabcon').mouseover(function () {
+            clearInterval(tabChange);
+        });
+        $('.tabcon').mouseout(function () {
+            tabChange = setInterval(autotab, 3000);
+        });
+    }
+});
+
+//第六部分tab选项卡切换
+
+$(function () {
+    $(".ptab .tlist ul li").mouseover(function () {
+        $(this).addClass('hover').siblings().removeClass('hover');
+        var index2 = $(this).index();
+        number = index2;
+        $('.imgcon .img').hide();
+        $('.imgcon .img:eq(' + index2 + ')').show();
+        $('.pconsl .imglist').hide();
+        $('.pconsl .imglist:eq(' + index2 + ')').show();
+    });
+});
+
+
+//头部置顶
+$(document).ready(function () {
+    var topMain = $("#header").height()
+    var nav = $(".headNav");
+    $(window).scroll(function () {
+        if ($(window).scrollTop() > topMain) {
+            nav.addClass("ScrollNav");
+        }
+        else {
+            nav.removeClass("ScrollNav");
+        }
+    });
+
+})
+
+
+
+
+
+
+
+

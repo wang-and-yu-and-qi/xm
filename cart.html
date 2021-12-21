@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/cart.css" />
+    <script src="./lib/jquery-2.2.4.js"></script>
+    <script src="./js/layer.js"></script>
+    <link rel="stylesheet" href="css/3.css">
+</head>
+
+<body>
+    <div class="Top">
+		<div class="w1100">
+			<span class="fl">您好~欢迎您来到鸿星尔克官方商城！</span>
+			<ul class="topnav fr clearfix">
+				<li><a href="./登录.html" rel="nofollow" class="left">[请登录]</a>
+				</li>
+				<li><a href="#" rel="nofollow" class="right"></a>
+				</li>
+				
+				
+			</ul>
+			<div class="cb"></div>
+		</div>
+	</div>
+	<div class="header">
+		<div class="w1100">
+			<div class="logo fl">
+				<h1><img src="image/logo1.png" alt=""></h1>
+
+			</div>
+			<div class="search fr">
+				<label>搜索：</label>
+				<div><input type="text" id="search_1" class="input_text" placeholder="跑步鞋" value="" autocomplete="off">
+				</div>
+				<input type="button" value="搜索" class="input_submit">
+			</div>
+			<div class="cb"></div>
+		</div>
+	</div>
+    <!-- 购物车 -->
+    <div class="J_cart cart w1100" ng-app="ShoppingCarApp" ng-controller="ShoppingCartController">
+        <div id="J_FilterBar" class="cart-filter-bar">
+            <h3 style="line-height: 1.5;font-size: 20px;margin: 20px 0;">我的购物车</h3>
+          
+            
+            <div class="cb"></div>
+        </div>
+        <!--内容区-->
+        <table id="cartTable">
+            <thead>
+                <tr style="border-bottom: slategray 1px solid;">
+                    <th>
+                        <label>
+                            <input class="check-all check" type="checkbox" />&nbsp;全选</label>
+                    </th>
+                    <th>商品</th>
+                    <th>尺码</th>
+                    <th>颜色样式</th>
+                    <th>单价</th>
+                    <th>数量</th>
+                    <th>小计</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr>
+                <td class="checkbox">
+                  <input class="check-one check" type="checkbox" />
+                </td>
+                <td class="goods">
+                  <img src="images/1.jpg" alt="" />
+                  <span>Casio/卡西欧 EX-TR350</span>
+                </td>
+                <td class="price">5999.88</td>
+                <td class="count">
+                  <span class="reduce"></span>
+                  <input class="count-input" type="text" value="1" />
+                  <span class="add">+</span>
+                </td>
+                <td class="subtotal">5999.88</td>
+                <td class="operation">
+                  <span class="delete">删除</span>
+                </td>
+              </tr> -->
+
+
+
+            </tbody>
+        </table>
+
+        <div class="cartfoot" id="foot">
+            <label class="fl select-all">
+                <input type="checkbox" class="check-all check" />&nbsp;全选</label>
+            <a class="fl delete" id="deleteAll" href="javascript:;">批量删除</a>
+           
+            <div class="fr total">合计（不算邮费）：￥
+                <span id="priceTotal">0.00</span>
+            </div>
+            <div class="fr selected" id="selected">已选商品
+                <span id="selectedTotal">0</span>件
+               
+            </div>
+            <div class="selected-view">
+                <div id="selectedViewList" class="clearfix">
+                    <!--<div><img src="images/1.jpg"><span>取消选择</span></div>-->
+                </div>
+                <span class="arrow">◆
+                    <span>◆</span>
+                </span>
+            </div>
+        </div>
+        <div class="fr closing">结 算</div>
+        <script src="./js/cart.js"></script>
+        <!--/我的购物车-->
+    </div>
+</body>
+<script src="js/登录.js"></script>
+</html>

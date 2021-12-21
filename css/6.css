@@ -1,0 +1,149 @@
+.tb-prop {
+    padding-bottom: 6px;
+}
+
+.tb-metatit {
+    text-align: left;
+    float: left;
+
+    height: 33px;
+    font-size: 12px;
+    line-height: 33px;
+    color: #666;
+    font-family: "微软雅黑";
+    padding-left: 10px;
+
+}
+
+.tb-key .tb-metatit {
+    color: #838383;
+}
+
+.tm-sale-prop dt {
+    margin-top: 6px;
+}
+
+.tb-prop dd {
+
+    width: 420px;
+    float: left;
+    margin-left: 35px;
+    margin-top: 10px;
+
+}
+
+li,
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.tm-sale-prop li {
+    line-height: 28px;
+}
+
+.tb-prop li {
+    float: left;
+    position: relative;
+    margin: 0 4px 4px 0;
+    line-height: 20px;
+    vertical-align: middle;
+    padding: 1px;
+}
+
+.tb-property .tb-key li.tb-out-of-stock a {
+    border: 1px dashed #D6D6D8;
+    color: #CDCDCD;
+    margin: 0;
+    cursor: not-allowed;
+}
+
+.tb-prop li a {
+    float: left;
+    background-color: #fff;
+    white-space: nowrap;
+    width: auto !important;
+    min-width: 10px;
+    padding: 0 9px;
+    text-align: center;
+    border: 1px solid #b8b7bd;
+    color: #000;
+    text-decoration: none;
+}
+
+.tb-prop li span {
+    padding-left: 1px;
+}
+
+.tb-prop li a:hover
+ {
+    border: 2px solid #FF0036;
+    margin: -1px;
+}
+.centerbox .buy{
+   margin: 80px 170px;
+    height: 50px;
+    width: 200px;
+    background-color: #ff0036;
+    border: 1px solid #ff0036;
+    color: #fff;
+    
+}
+.centerbox .buy:hover{
+    cursor: pointer;
+    background-color: blue;
+}
+.tm-ser {
+    
+    padding-bottom: 20px;
+    position: relative;
+}
+.tm-ser .tb-serPromise li {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    white-space: nowrap;
+    padding-right: 50px;
+    padding-bottom: 5px;
+}
+.tm-ser s.txt1 {
+    background-color: #e22425;
+}
+.tm-ser s.txt2 {
+    background-color: #f9b02e;
+}
+.tm-ser s.txt3 {
+    background-color: #6893ec;
+}
+.tm-ser s.txt1, .tm-ser s.txt2, .tm-ser s.txt3 {
+    color: #fff;
+    height: 16px;
+    /* line-height: 16px; */
+    width: 16px;
+    text-align: center;
+    font-style: normal;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    font-family: SimSun;
+    margin-right: 4px;
+}
+.tm-clear .tb-metatit {
+    text-align: left;
+    float: left;
+    height: 33px;
+    font-size: 12px;
+    line-height: 33px;
+    color: #666;
+    font-family: "微软雅黑";
+    padding-left: 10px;
+}
+.tm-ser .tb-serPromise {
+    overflow: hidden;
+    padding: 5px;
+}
+.ac{
+    background-color: #00FFFF;
+  
+}

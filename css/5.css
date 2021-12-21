@@ -1,0 +1,408 @@
+@charset "utf-8";
+
+/*通用样式*/
+*{
+	   margin:0; padding:0;
+}
+body{
+	  font-size:12px; color:#333;
+	   margin:0; padding:0;
+	   }
+a{
+	 text-decoration:none; 
+	 color:#333;
+	  font-size:12px;
+	  }
+ul,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,form,p{
+	 padding:0; margin:0;
+	  list-style:none;
+	  }
+img{ border:0px;}
+.clear{
+	  clear:both;
+	  }
+
+
+/*商品详情部分*/
+.shopdetails{
+	width:1200px;
+	height:700px;
+	margin:0 auto;
+	margin-top:20px;
+	position:relative;
+	
+}
+/*放大镜*/
+ul,
+li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.bg{
+   position: absolute;
+   
+   z-index: 3;
+}
+.bg_left {
+    width: 400px;
+    height: auto;
+    float: left
+}
+
+.bg_right {
+    float: left
+}
+
+.show {
+    width: 400px;
+    height: 430px;
+    margin-bottom: 10px;
+    position: relative;
+    border: 1px solid #E8E8E8;
+    cursor: move
+}
+
+.show img {
+    width: 400px;
+    height: 430px;
+}
+
+.mask {
+    width: 215px;
+    height: 215px;
+    background: #000;
+    filter: Alpha(opacity=50);
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+.bigshow {
+    width: 430px;
+    height: 430px;
+    overflow: hidden;
+    margin-left: 10px;
+    display: none;
+    border: 1px solid #E8E8E8;
+}
+
+.bigshow img {
+    width: 860px;
+    height: 860px;
+    margin-right: 10px;
+}
+
+.smallshow {
+    width: 100%;
+    height: 70px;
+    position: relative
+}
+
+.smallshow img {
+    width: 100%;
+    border: 1px solid #e8e8e8;
+    box-sizing: border-box;
+    transition: all 0.5s
+}
+
+.smallshow>.middle_box {
+    margin-left: 30px;
+    margin-right: 30px;
+    width: 370px;
+    overflow: hidden;
+    height: 70px;
+}
+
+.smallshow .middle {
+    overflow: hidden;
+    transition: all 0.5s;
+    height: 70px;
+}
+
+.smallshow .middle>li {
+    width: 64px;
+    height: 64px;
+    float: left;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+.smallshow>p {
+    position: absolute;
+    top: 50%;
+    width: 22px;
+    height: 32px;
+    margin-top: -16px;
+}
+/*中间*/
+
+.centerbox{
+	width:580px;
+	height:575px;
+	position:absolute;
+	top:0px;
+	left:420px;
+	z-index:1;
+}
+.centerbox .imgname{
+	font-size:24px;
+	color:#000;
+	font-weight:bold;
+	width:580px;
+	
+	font-family:Microsoft YaHei,arial;
+	margin-bottom:10px;
+}
+.centerbox p,.centerbox samp{
+	width:580px;
+	height:33px;
+	font-size:12px;
+	line-height:33px;
+	color:#666;
+	font-family:"微软雅黑";
+	padding-left:10px;
+	
+}
+.centerbox .Aprice, .price, .youhui{
+	background:rgba(232,232,232,0.5);
+}
+.centerbox .Aprice samp{
+	font-size:14px;
+	text-decoration:line-through;
+	font-family:"华文仿宋";
+}
+.centerbox .price samp{
+	color:#D00;
+	font-size:20px;
+	font-weight:bold;
+}
+.centerbox .youhui samp{
+	color:#000;
+	font-weight:100;
+}
+
+/*右边*/
+.rightbox{
+	width:150px;
+	height:632px;
+	position:absolute;
+	top:0;
+	right:0;
+	border-left:1px solid #ccc;
+}
+.rightbox .name{
+	height:30px;width:150px;
+	color:#666;
+	font-size:16px;
+	line-height:30px;
+	text-align:left;
+	font-family:"黑体";
+}
+.rightbox img{
+	margin-left:20px;
+}
+.rightbox p{
+	width:150px;
+	height:20px;
+	font-size:14px;
+	text-align:center;
+	line-height:20px;
+}
+/*下边商品评价及其他*/	
+.evaluate{
+	width:1200px;
+	height:4000px;
+	margin:0 auto;
+	position:relative;
+}
+.classify{
+	width:198px;height:1500px;
+}
+.classify .shopim {
+	width:198px;height:210px;
+	border:1px solid #ccc;
+
+}
+.classify .shopim .name{
+	height:55px;width:198px;
+	background:rgba(232,232,232,0.5);
+	color:#000;
+	font-size:14px;
+	font-weight:bold;
+	line-height:55px;
+	text-align:center;
+	
+}
+.classify .shopim .name img{
+	margin-left:0;
+	margin-bottom:-8px;
+}
+.classify .shopim img{ 
+	margin-left:21px;
+	margin-top:15px;
+}
+.classify .shopim .sc{
+	float:left;
+	width:67px;
+	height:20px;
+	border:1px solid #CCC;
+	margin-left:20px;
+	margin-top:10px;
+	text-align:center;
+	line-height:20px;
+	
+}
+.classify .shopim .sc a{
+	color:#666;
+}
+.classify .shopfl{
+	width:198px;height:400px;
+	border:1px solid #ccc;
+	margin-top:30px;
+}
+.classify .shopfl ul li{
+	width:198px;
+	height:40px;
+}
+.classify .shopfl ul{
+	margin-top:15px;
+}
+.classify .shopfl ul li a{
+	width:150px;
+	height:40px;
+	font-size:12px;
+	font-family:"黑体";
+	margin-left:20px;
+	color:#666;
+	line-height:40px;
+}
+.classify .shopfl ul li a:hover{
+	color:#9F3;
+	font-size:16px;
+}
+.classify .shopfl .name{
+	height:40px;width:198px;
+	background:rgba(232,232,232,0.5);
+	color:#000;
+	font-size:16px;
+	font-weight:bold;
+	line-height:40px;
+	text-align:center;
+	
+}
+.classify .shopsee{
+	width:198px;height:3330px;
+	border:1px solid #ccc;
+	margin-top:20px;
+}
+.classify .shopsee .name{
+	height:40px;width:198px;
+	background:rgba(232,232,232,0.5);
+	color:#000;
+	font-size:16px;
+	font-weight:bold;
+	line-height:40px;
+	text-align:center;
+	
+}
+.classify .shopsee a{
+	width:170px;margin:0;
+	margin-top:10px;
+	margin-left:14px;
+	border:0;
+	
+}
+.classify .shopsee img{
+	margin-top:10px;
+}
+
+.classify .shopsee .ex01 p{
+	margin-top:0;
+	width:170px;height:20px;
+	margin-left:14px;
+	line-height:20px;
+	font-size:14px;
+}
+
+/*tab部分*/
+.tabbedPanels {
+	position:absolute;
+	top:0;
+	right:0;
+	width: 980px;
+	margin:10px auto;
+	border:1px soild #000;
+}
+
+.tabbedPanels .tabs{
+	width:950px;
+	height:50px;
+	border-bottom:2px solid #000;
+	margin-bottom:20px;
+}
+.tabbedPanels .tabs li{
+	float:left;
+}
+.tabbedPanels .tabs li a{
+	width:100px;
+	height:40px;
+	margin-bottom:10px;
+	font-size:16px;
+	font-weight:bold;
+	margin-left:50px;
+	text-decoration:none;
+	color:#000;
+	line-height:40px;
+	text-align:center;
+}
+
+.tabs li a.active{
+	border-bottom:3px solid #F30;
+		
+	}
+.panelContainer{
+	width:950px;
+	margin:0 auto;
+	margin-top:10px;
+}
+.panel .sell{
+	font-weight:bold;
+	font-size:20px;
+	color:#000;
+	text-decoration:underline;}
+.panel p{
+	margin-bottom:20px;
+}
+.panel img{
+	margin-left:10px;
+}
+.panel .judge{
+	font-size:14px;
+	font-weight:bold;
+	color:#000;
+	
+}
+.panel .judge span{
+	font-size:14px;
+	margin-left:15px;
+}
+.panel .judge01{
+	height:200px;
+	position:relative;
+}
+.panel .judge01 .idimg{
+	width:80px;
+	}
+.panel .judge01 .write{
+	position:absolute;
+	top:20px;
+	left:80px;
+}
+.panel .judge01 .write .which{
+	color:#666;
+	font-size:12px;
+}

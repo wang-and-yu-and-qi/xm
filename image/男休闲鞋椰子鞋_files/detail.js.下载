@@ -1,0 +1,515 @@
+
+//$(function() {
+	//左侧列表
+//	$(".sidebarList li:last").css("border","0");
+//	//详情切换
+//	tabFun(".inforTitle a",".information>div","current");
+//	//小图片的轮转
+//	
+//	$(".picList").scrollList({prev:'#prev1',next:'#next1',visible:4,scroll:1});
+//	$(".team_picList").scrollList({prev:'#prev1',next:'#next1',visible:4,scroll:1,vertical:true});
+//	//组合商品
+//		var option = {
+//		prev:'#prev2',//向前滚动按钮
+//		next:'#next2',//向后滚动按钮
+//		visible:3,//设置图片显示的张数，默认为4
+//		scroll:1,//设置每次图片滚动的次数，默认为4
+//		speed:600//设置图片滚动的速度，默认为600
+//	};
+//	$(".combi_list_box").scrollList(option);
+//	var combiliw = $(".combi_list_box").find("li").outerWidth(true);
+//	$(".combi_list_box").width(3*combiliw-31);
+//	//放大镜
+//    var options = {
+//        zoomWidth: 400,
+//        zoomHeight: 400,
+//        showEffect:'show',
+//        hideEffect:'hide',
+//        fadeoutSpeed: 'slow',
+//        title :false,
+//        yOffset:0,
+//        showPreload:false
+//    }
+//	$("#jqzoom").jqzoom(options);
+//	//点击小图看大图
+//    
+//    $('.image_list img').live('click',function(){
+//    	if($(this).attr('source')!='')
+//		$('#current_img').attr('src', $(this).attr('source'));
+//    	if($(this).attr('original')!='')
+//        $('#current_img').parent().attr('href', $(this).attr('original'));
+//    	
+//        $(".picList").find('li').removeClass('current');
+//		$(this).parent().parent().addClass('current');
+//    });  
+//	//颜色选择
+//    $(".color_img").live('click',function(){
+//    	if($(this).attr('source')!='')
+//    		$('#current_img').attr('src', $(this).attr('source'));
+//		if($(this).attr('original')!='')
+//			$('#current_img').parent().attr('href', $(this).attr('original'));	
+//		$(".image_list").hide().removeClass('current');
+//		$("li[class='image_list'][code='"+$(this).attr('code')+"']").show();
+//		$(".image_list:visible").eq(0).addClass("current");
+//		//重置图片滚动列表
+//		var lUl = $(".picList>ul");
+//		lUl.css("left","0");
+//		$('.btnNext').addClass("next-disabled");
+//			if($('li:visible',lUl).size()<=4){
+//				$('.btnPrevious').addClass("prev-disabled");	
+//			}else{
+//				$('.btnPrevious').removeClass("prev-disabled");
+//			}
+//    }); 
+//	//商品详情页如果只有一个颜色或尺码，默认让它选中
+//    //如果尺码为1 隐藏
+//	var imgColorLen = $('.color_detail a img').size();
+//	var imgSizeLen = $('.goodsSize a').size();
+//	if(imgColorLen==1){
+//		$('.color_detail a img').click();
+//	}
+//	if(imgSizeLen==1){
+//		$('.goodsSize a').click();
+//	}
+//	
+//	//加入收藏，计入购物车成功弹框
+//	$(".add_btn").live('click',function(){
+//		$(this).next().show();
+//	});
+//	$(".success_popup .close").live('click',function(){
+//		$(this).parent().hide();
+//	});
+//	//会员价弹框
+//	$(".question_mark_btn").live('click',function(e){
+//		 e.stopPropagation();
+//		$(this).next().show();
+//	});
+//	$("body").live('click',function(){
+//		$(".member_price_txt").hide();
+//	});
+//	$(".member_price_txt").live('click',function(e){
+//		 e.stopPropagation();
+//	});
+//});
+
+function order(){
+	var _this = this;
+	this.color = new Array();
+	this.size = new Array();
+	this.select_color_name;
+	this.select_color_code;
+	this.select_size_name
+	this.select_size_code;
+	this.url_parameter;
+	this.gift_id;
+	this.num = 0;
+	this.control_inv = false;
+	this.add_car_url;
+	this.car_url;
+	this.platform_type;
+	this.goods_type;
+	this.action_type;
+	this.parameter = new Object();
+	this.init = function(init_parameter){
+		if(typeof init_parameter['id'] == "undefined"){
+			js_error("Id parameter must exist");
+		}
+		_this.gift_id = init_parameter['id'];
+		
+		if(typeof init_parameter['control_inv'] != "undefined"){
+			_this.control_inv = init_parameter['control_inv'];
+		}
+		
+		if(typeof init_parameter['add_car_url'] != "undefined"){
+			_this.add_car_url = init_parameter['add_car_url'];
+		}
+		
+		if(typeof init_parameter['car_url'] != "undefined"){
+			_this.car_url = init_parameter['car_url'];
+		}
+		
+		if(typeof init_parameter['platform_type'] != "undefined"){
+			_this.platform_type = init_parameter['platform_type'];
+		}else{
+			_this.platform_type = 1;
+		}
+
+        if(typeof init_parameter['action_type'] != "undefined"){
+			_this.action_type = init_parameter['action_type'];
+		}else{
+			_this.action_type = '';
+		}
+		if( typeof init_parameter['select_color_code'] !='undefined' ){
+			_this.select_color_code = init_parameter['select_color_code'];
+		}else{
+			_this.select_color_code = '';
+		}
+		if( typeof init_parameter['select_size_code'] !='undefined' ){
+			_this.select_size_code = init_parameter['select_size_code'];
+		}else{
+			_this.select_size_code = '';
+		}
+        if(typeof init_parameter['goods_type'] != "undefined"){
+			_this.goods_type = init_parameter['goods_type'];
+		}else{
+			_this.goods_type = 0;
+		}
+		if(jQuery("#color").size() > 0){
+			jQuery("#color").find("a").each(function(){
+				_this.color.push(jQuery(this).attr("id"));
+				if(_this.control_inv){
+					jQuery(this).bind("click",_this.click_color_inv);
+				}else{
+					jQuery(this).bind("click",_this.click_color);
+				}
+			})
+		}
+		if(jQuery("#size").size() > 0){
+			jQuery("#size").find("a").each(function(){
+				_this.size.push(jQuery(this).attr("id"));
+				if(_this.control_inv){
+					jQuery(this).bind("click",_this.click_size_inv);
+				}else{
+					jQuery(this).bind("click",_this.click_size);
+				}
+				
+			})
+		}
+		
+		jQuery("#add_num").bind("click",_this.add_num);
+		jQuery("#reduce_num").bind("click",_this.reduce_num);
+
+		jQuery("#add_car").unbind('click').bind("click",_this.add_car);
+		if(jQuery("#add_order").size() > 0){
+			jQuery("#add_order").unbind('click').bind("click",_this.add_order);
+		}
+		if(jQuery("#add_car_ajax").size() > 0){
+			jQuery("#add_car_ajax").unbind('click').bind("click",_this.add_car_ajax);
+		}
+		if(jQuery("#confirm_order").size() > 0){
+			jQuery("#confirm_order").unbind('click').bind("click",_this.confirm_order);
+		}
+	}
+		
+	this.verification = function(){
+		if(jQuery("#color").size() > 0 && _this.action_type != 'sold'){
+			if(typeof _this.select_color_code == "undefined" || typeof _this.select_size_code == "undefined"
+				|| _this.select_color_code == "" || _this.select_size_code == ""){
+                                layer.msg('请选择颜色尺码', { icon: 0 });
+				return false;
+			}
+		}
+		
+		_this.num = jQuery("#num").val();
+                _this.activity_num = parseInt(jQuery("#activity_num").text());
+		if(jQuery("#real_num").size() > 0 && parseInt(_this.num) > parseInt(jQuery("#real_num").text())){
+                        layer.msg('库存不足', { icon: 0 });
+			return false;
+		}
+                if(parseInt(_this.num) > _this.activity_num){
+                        layer.msg('超过团购数量', { icon: 0 });
+			return false;
+                }
+		
+		/*if(jQuery("input[name='password']").size() > 0){
+			var password = jQuery("input[name='password']").val();
+			if(password == ""){
+				alert("请输入密码");
+				return false;
+			}else{
+				_this.parameter['password'] = password;
+			}
+		}*/
+		_this.parameter['id'] = _this.gift_id;
+		_this.parameter['color_code'] = _this.select_color_code;
+		_this.parameter['size_code'] = _this.select_size_code;
+		_this.parameter['num'] = _this.num;
+
+		_this.parameter['platform_type'] = _this.platform_type;
+		_this.parameter['action_type'] = _this.action_type;
+		_this.parameter['goods_type'] = _this.goods_type;
+		//后台会员卡号
+		if(jQuery("input[name='vip_code']").size() > 0)
+			_this.parameter['vip_code'] = jQuery("input[name='vip_code']").val();
+		if(jQuery("input[name='vip_code_p']").size() > 0)
+			_this.parameter['vip_code_p'] = jQuery("input[name='vip_code_p']").val();
+		return true;
+	}
+	
+	this.add_car = function(){
+			if(!_this.verification())
+				return;
+			jQuery.ajax({
+			    type: "POST",
+				cache: false,
+				data:_this.parameter,
+				url: _this.add_car_url,
+				dataType:'json',
+				success: function(value){
+					if(value.status == "1"){
+						$('.goToCalBtn').click(function(){
+							location.href = _this.car_url;
+						});
+						$('.addCarOpenup').show();
+						$('.goodsCar .fn').text(value.data);
+					}else{
+                         layer.msg(value.message, { icon: 0 });
+						if(value.data != "")
+							window.location.href=value.data;
+					}
+				}
+			})
+	}
+	
+	this.add_car_ajax = function(){
+		if(!_this.verification())
+			return;
+		jQuery.ajax({
+		    type: "POST",
+			cache: false,
+			data:_this.parameter,
+			url: _this.add_car_url,
+			dataType:'json',
+			success: function(value){
+				if(value.status == "1"){
+					layer.msg(value.message, { icon: 1 });
+					refresh();
+				}else{
+                                        layer.msg(value.message, { icon: 0 });
+					if(value.data != "")
+						window.location.href=value.data;
+				}
+			}
+		})
+	}
+	
+	this.add_order = function(){
+		if(!_this.verification())
+			return;
+		jQuery.ajax({
+		    type: "POST",
+			cache: false,
+			data:_this.parameter,
+			url: _this.add_car_url,
+			dataType:'json',
+			success: function(value){
+				value = eval(value);
+				if(value.status == "1"){
+					/*
+					var url=_this.car_url;
+					if(url.indexOf('?') != -1){
+						url += '&';
+					}else{
+						url += '?';
+					}
+					url+= 'type='+_this.action_type;
+					*/
+					window.location.href=_this.car_url;
+				}else{
+					layer.msg(value.message, { icon: 0 });
+					if(value.data != "")
+						window.location.href=value.data;
+				}
+			}
+		})
+	}
+	
+	this.fast_order = function(init_parameter){
+		if(!_this.verification()){
+			return;
+		}
+		if(typeof init_parameter['id'] == "undefined"){
+			js_error("Id parameter must exist");
+		}
+
+		init_parameter['id'] = _this.gift_id;
+		init_parameter['color_code'] = _this.select_color_code;
+		init_parameter['size_code'] = _this.select_size_code;
+		init_parameter['num'] = _this.num;
+		init_parameter['platform_type'] = _this.platform_type;
+
+		jQuery.ajax({
+		    type: "POST",
+			cache: false,
+			data:init_parameter,
+			url: init_parameter.add_car_url,
+			dataType:'json',
+			success: function(value){
+				value = eval(value);
+				if(value.status == "1"){
+					window.location.href=init_parameter.car_url;
+				}else{
+					layer.msg(value.message, { icon: 0 });
+					if(value.data != "")
+						window.location.href=value.data;
+				}
+			}
+		})
+	}
+
+	this.click_color_inv = function(){
+		_this.select_color_code = jQuery(this).attr("alt");  
+                var sel_html = '<span>"'+$(this).attr("value")+'"</span>';
+                $(".sel_color").html(sel_html).show();
+                _this.select_color_name = jQuery(this).attr("value");
+		if(jQuery(this).parent().hasClass("tb-selected")){
+			//jQuery(this).parent().removeClass("tb-selected");
+			//jQuery("#size").find(".size_detail").parent().removeClass("tb-selected").unbind("click",_this.click_size_inv).bind("click",_this.click_size_inv);
+//                        jQuery("#gourp_main_select").html("");
+//                        jQuery("#group_main_goods").removeAttr("cc");
+//                        jQuery("#group_main_goods").removeAttr("sc");
+//                        jQuery("#group_main_goods").attr("checked",false);
+//			 var r;
+//			 _this.select_color_code =r;
+//			 return;
+			}
+//                        if(typeof _this.select_size_name != "undefined"){
+//                            var html = "<div class=\"current-chose pa clearfix b0 l0 tl\"><b>当前选择：</b><dl class=\"clearfix pr\"><dt>颜色：</dt><dd>"+_this.select_color_name+"</dd><dt class=\"ml15\">尺码：</dt><dd>"+_this.select_size_name+"</dd></dl></div>";        
+//                            jQuery("#gourp_main_select").html(html);
+//                            jQuery("#group_main_goods").attr("cc",_this.select_color_code);
+//                            jQuery("#group_main_goods").attr("sc",_this.select_size_code);
+//                            jQuery("#group_main_goods").attr("checked",true);
+//                        }
+//		jQuery("#color").parent().find("dt").eq(0).find("b").html('');
+		jQuery("#color").find(".color_detail").parent().removeClass("tb-selected");
+		jQuery(this).parent().addClass("tb-selected");
+		jQuery.ajax({
+		    type: "GET",
+			cache: false,
+			url: site_url+"base/platform_goods/get_size&id="+_this.gift_id+"&color_code="+_this.select_color_code,
+			dataType:'json',
+			async:false,
+			data:{"select_color_code":_this.select_color_code,"select_size_code":_this.select_size_code,"platform_type":_this.platform_type},
+			success: function(value){
+				value = eval(value);
+                                jQuery("#size").show();
+				jQuery("#real_num").html(value['num']);//库存
+				if(value['size'].length == 0){
+					jQuery("#size").hide();
+					jQuery("#size").find("a").each(function(){
+						jQuery(this).unbind("click",_this.click_size);
+					})
+				}
+				jQuery("#size").find("a").each(function(){
+					jQuery(this).parent().hide();
+					jQuery(this).unbind("click",_this.click_size_inv);
+					
+				})
+				
+				for(var i=0;i < value['size'].length;i++){
+					jQuery("#size").find("a").each(function(){
+					//	if(jQuery(this).attr("alt") == _this.select_size_code){
+						//	jQuery(this).unbind("click",_this.click_color_inv);
+						//	jQuery(this).show();//addClass("noselect").removeClass("noselect");
+						//	jQuery(this).bind("click",_this.click_size_inv);
+					//	}else
+					 if(jQuery(this).attr("alt") == value['size'][i] ){
+							jQuery(this).unbind("click",_this.click_size_inv);
+							jQuery(this).parent().show();
+							jQuery(this).bind("click",_this.click_size_inv);
+						}
+					})
+				}
+			}
+		})
+		
+	}
+	
+	this.click_size_inv = function(){
+		_this.select_size_code = jQuery(this).attr("alt");
+                var sel_html = '<span>,"'+$(this).attr("value")+'"</span>';
+                $(".sel_size").html(sel_html).show();
+                _this.select_size_name = jQuery(this).html();
+		if(jQuery(this).parent().hasClass("tb-selected")){
+			//jQuery(this).parent().removeClass("tb-selected");
+//			jQuery("#color").find(".color_detail").parent().removeClass("tb-selected").unbind("click",_this.click_color_inv).bind("click",_this.click_color_inv);
+			//jQuery("#size").parent().find("dt").eq(1).find("b").html("请选择尺码");
+//                        jQuery("#gourp_main_select").html("");
+//                        jQuery("#group_main_goods").attr("checked",false);
+//                        jQuery("#group_main_goods").removeAttr("cc");
+//                        jQuery("#group_main_goods").removeAttr("sc");
+//			 var r;
+//			 _this.select_size_code =r;
+//			 return;
+			}
+//                var html = "<div class=\"current-chose pa clearfix b0 l0 tl\"><b>当前选择：</b><dl class=\"clearfix pr\"><dt>颜色：</dt><dd>"+_this.select_color_name+"</dd><dt class=\"ml15\">尺码：</dt><dd>"+_this.select_size_name+"</dd></dl></div>";        
+//		jQuery("#gourp_main_select").html(html);
+//                jQuery("#group_main_goods").attr("checked",true);
+//                jQuery("#group_main_goods").attr("cc",_this.select_color_code);
+//                jQuery("#group_main_goods").attr("sc",_this.select_size_code);
+//		jQuery("#size").parent().find("dt").eq(1).find("b").html(jQuery(this).html());
+		jQuery("#size").find(".size_detail").parent().removeClass("tb-selected");
+		jQuery(this).parent().addClass("tb-selected");
+		jQuery.ajax({
+		    type: "GET",
+			cache: false,
+			url: site_url+"base/platform_goods/get_color&id="+_this.gift_id+"&size_code="+_this.select_size_code+"&platform_type=1",
+			dataType:'json',
+			async:false,
+			data:{"select_color_code":_this.select_color_code,"select_size_code":_this.select_size_code,"platform_type":_this.platform_type},
+			success: function(value){
+				value = eval(value);
+				jQuery("#real_num").html(value['num']);
+                                jQuery("#price_current").html(value['price']);
+				if(value['color'].length == 0){
+					jQuery("#color").find("a").hide();
+					jQuery("#color").find("a").each(function(){
+						jQuery(this).unbind("click",_this.click_color);
+					})
+				}
+				
+				jQuery("#color").find("a").each(function(){
+					jQuery(this).hide();
+					jQuery(this).unbind("click",_this.click_color_inv);
+				})
+				for(var i=0;i < value['color'].length;i++){
+					jQuery("#color").find("a").each(function(){
+						//if(jQuery(this).attr("alt") == _this.select_color_code){
+						//	jQuery(this).unbind("click",_this.click_color_inv);
+						//	jQuery(this).show();//addClass("noselect").removeClass("noselect");
+						//	jQuery(this).bind("click",_this.click_color_inv);
+						//}else
+						 if(jQuery(this).attr("alt") == value['color'][i]){
+							jQuery(this).unbind("click",_this.click_color_inv);
+							jQuery(this).show();//addClass("noselect").removeClass("noselect");
+							jQuery(this).bind("click",_this.click_color_inv);
+						}
+					})
+				}
+			}
+		})
+	}
+	
+	this.click_color = function(){
+		_this.select_color_code = jQuery(this).attr("id");
+		//jQuery("#num").val("1");
+		
+		jQuery("#color").find("li").removeClass("tb-selected");
+		
+		jQuery(this).addClass("tb-selected");
+	}
+	
+	this.click_size = function(){
+		
+		_this.select_size_code = jQuery(this).attr("id");
+		//jQuery("#num").val("1");
+		jQuery("#size").find("li").removeClass("tb-selected");
+		
+		jQuery(this).addClass("tb-selected");
+	}
+	
+	this.add_num = function(){
+		var num = jQuery("#num").val();
+		jQuery("#num").val(++num);
+	}
+	
+	this.reduce_num = function(){
+		var num = jQuery("#num").val();
+		if(num < 2){
+			num = 2;
+		}
+		jQuery("#num").val(--num);
+	}
+}
+
+

@@ -1,0 +1,260 @@
+﻿///<reference path="jquery-1.11.1.min.js"/>
+        function checkclose() {
+            $(".mui-bar-login").css("display", "none");
+        }
+$(function() {
+    //让通栏tab部分居中
+    var setMuiTabsMiddle = function() {
+        var muiTabsHeight = 350;
+        var winHeight = $(window).height();
+        var minMarginTop = 35;
+        if (winHeight > muiTabsHeight) {
+            var nowMarginTop = (winHeight - muiTabsHeight) / 2;
+            nowMarginTop = (nowMarginTop > minMarginTop ? nowMarginTop : minMarginTop);
+        }
+        $('.mui-bar-tabs').css('margin-top', nowMarginTop + 'px');
+    };
+
+    //我的收藏
+    $(".mui-bar-tabs-favorite").mouseenter(function() {
+        $(this).children(".mp_tooltip").animate({
+            left: -140,
+            queue: true
+        });
+        $(this).children(".mp_tooltip").css("visibility", "visible");
+        $(this).children(".ibar_login_box").css("display", "block");
+    });
+    $(".mui-bar-tabs-favorite").mouseleave(function() {
+        $(this).children(".mp_tooltip").css("visibility", "hidden");
+        $(this).children(".mp_tooltip").animate({
+            left: -121,
+            queue: true
+        });
+        $(this).children(".ibar_login_box").css("display", "none");
+    });
+
+
+    //客户服务
+    $(".mui-bar-tabs-service").mouseenter(function() {
+        $(this).children(".mp_tooltip").animate({
+            left: -140,
+            queue: true
+        });
+        $(this).children(".mp_tooltip").css("visibility", "visible");
+        $(this).children(".ibar_login_box").css("display", "block");
+    });
+    $(".mui-bar-tabs-service").mouseleave(function() {
+        $(this).children(".mp_tooltip").css("visibility", "hidden");
+        $(this).children(".mp_tooltip").animate({
+            left: -121,
+            queue: true
+        });
+        $(this).children(".ibar_login_box").css("display", "none");
+    });
+
+    //我的优惠卷
+    $(".mui-bar-tabs-coupon").mouseenter(function() {
+        $(this).children(".mp_tooltip").animate({
+            left: -140,
+            queue: true
+        });
+        $(this).children(".mp_tooltip").css("visibility", "visible");
+        $(this).children(".ibar_login_box").css("display", "block");
+    });
+    $(".mui-bar-tabs-coupon").mouseleave(function() {
+        $(this).children(".mp_tooltip").css("visibility", "hidden");
+        $(this).children(".mp_tooltip").animate({
+            left: -121,
+            queue: true
+        });
+        $(this).children(".ibar_login_box").css("display", "none");
+    });
+
+
+
+    //返回顶部
+    $('.mui-totop').click(function() {
+        $('html,body').stop().animate({
+            scrollTop: '0px'
+        }, 800);
+    });
+
+    //购物车点击事件
+    $('.mui-bar-tabs-shoppingcar a').click(function() {
+        var is_Login = $(this).attr('is_Login');
+        if (is_Login == "1") {
+            ShowMuiBarContent($(this), 'shoppingcar');
+        } else {
+            $('.mui-bar-login').show();
+        }
+    });
+    
+    //购物车移除
+    $('.shoppingcar-content-item-del').click(function() {
+        $(this).parent().remove();
+    });
+    //购物车加
+    $('.shoppingcar-content-item-add').click(function() {
+        var count = $(this).siblings().eq(0).text();
+        $(this).siblings().eq(0).text(parseInt(count) + 1);
+    });
+
+    //购物车减
+    $('.shoppingcar-content-item-sub').click(function() {
+        var count = $(this).siblings().eq(1).text();
+        $(this).siblings().eq(1).text((parseInt(count) - 1) > 0 ? parseInt(count) - 1 : 0);
+    });
+
+    //计算shoppingcar-content的高度
+    var getShoppingcarContentHeight = function() {
+        var totalHeight = $('.mui-bar-content-box').height();
+        var contentHeight = totalHeight - 30 - 120 - 29;
+//        $('.shoppingcar-content').css('height', contentHeight + 'px');
+    };
+
+    //计算favorite-box的高度
+    var getFavoriteBoxHeight = function() {
+        var totalHeight = $('.mui-bar-content-box').height();
+        var contentHeight = totalHeight;
+        $('.favorite-box').css('height', contentHeight + 'px');
+    };
+
+    //优惠卷特效开始了
+    //计算coupons-box的高度
+    var getcouponsBoxHeight = function() {
+        $('.coupons-box').css('height', '360px');
+    };
+    $(".coupons0").click(function() {
+        $("#coupons-box0").css('display', 'none');
+        $("#coupons-box1").css('display', 'block');
+        $(".coupons-box").css('display', 'block');
+    });
+    $(".coupons1").click(function() {
+        $("#coupons-box0").css('display', 'block');
+        $("#coupons-box1").css('display', 'none');
+        $(".coupons-box").css('display', 'none');
+    });
+    //已使用的优惠卷
+    var postcouponsBoxHeight = function() {
+        $('.post-coupons-box').css('height', '440px');
+    };
+    $(".coupons2").click(function() {
+        $("#coupons-box2").css('display', 'none');
+        $("#coupons-box3").css('display', 'block');
+        $(".post-coupons-box").css('display', 'block');
+        $("#coupon-title").css('display', 'none');
+        $("#coupons-box0").css('display', 'none');
+    });
+    $(".coupons3").click(function() {
+        $("#coupons-box2").css('display', 'block');
+        $("#coupons-box3").css('display', 'none');
+        $(".post-coupons-box").css('display', 'none');
+        $("#coupon-title").css('display', 'block');
+        $("#coupons-box0").css('display', 'block');
+    });
+    //收藏夹
+    $(".favorite-more").click(function() {
+        $(".favorite-box").css('display', 'block');
+        $("#favorite-box").css('display', 'none');
+    });
+
+    $(".favorite-mores").click(function() {
+        $(".favorite-box").css('display', 'none');
+        $("#favorite-box").css('display', 'block');
+    });
+
+    $('.mui-bar-tabs-favorite a').click(function() {
+        var is_Login = $(this).attr('is_Login');
+        if (is_Login == "1") {
+            ShowMuiBarContent($(this), 'favorite');
+        } else {
+            $('.mui-bar-login').show();
+        }
+    });
+
+    /*优惠券*/
+    $('.mui-bar-tabs-coupon a').click(function() {
+        var is_Login = $(this).attr('is_Login');
+        if (is_Login == "1") {
+            ShowMuiBarContent($(this), 'coupon');
+        } else {
+            $('.mui-bar-login').show();
+        }
+    });
+
+    /*隐藏其他内容*/
+    var _key = '';
+    var ShowMuiBarContent = function($e, key) {
+        var notRight = $('.mui-bar-box').css('right').replace('px', '');
+        if (notRight < 0) {
+            $('.mui-bar-box').stop().animate({
+                'right': '0px'
+            }, 500);
+            $e.addClass('actived');
+            _key = key;
+            $(".mui-bar-box").on("click",function(event){
+		var e= window.event|| event;	
+		if(e.stopPropagation){
+			e.stopPropagation();
+		}else{
+			e.cancelBubble = true;
+		}
+            });    
+        } else {
+            if (key == _key) {
+                $('.mui-bar-box').stop().animate({
+                    'right': '-290px'
+                }, 500);
+                $e.removeClass('actived')
+                //mui - bar - tabs
+            } else {
+                $e.addClass('actived').parent().siblings().find('a').removeClass('actived');
+                _key = key;
+            }
+        }
+
+        $('.mui-bar-content-' + key).show(200).siblings().hide(200);
+    }
+
+    // 隐藏右边栏
+
+
+    //初始化
+    setMuiTabsMiddle();
+    getShoppingcarContentHeight();
+    getFavoriteBoxHeight();
+    getcouponsBoxHeight();
+    postcouponsBoxHeight();
+    //添加滚动条
+    $('.shoppingcar-content,.favorite-box,.coupons-box,.post-coupons-box').niceScroll({
+        cursorcolor: "#ccc",
+        //#CC0071 光标颜色
+        cursoropacitymax: 1,
+        //改变不透明度非常光标处于活动状态（scrollabar“可见”状态），范围从1到0
+        touchbehavior: false,
+        //使光标拖动滚动像在台式电脑触摸设备
+        cursorwidth: "5px",
+        //像素光标的宽度
+        cursorborder: "0",
+        // 	游标边框css定义
+        cursorborderradius: "5px",
+        //以像素为光标边界半径
+        autohidemode: false //是否隐藏滚动条
+    });
+    //改变窗口大小时
+    $(window).resize(function() {
+        setMuiTabsMiddle();
+        getShoppingcarContentHeight();
+        getFavoriteBoxHeight();
+        getcouponsBoxHeight();
+        postcouponsBoxHeight();
+    });
+
+    $('body').click(function() {
+           $('.mui-bar-box').stop().animate({
+             'right': '-290px'
+         }, 500);
+        $('.mui-bar-tabs').find('a').removeClass('actived');
+    });
+
+});
