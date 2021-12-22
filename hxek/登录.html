@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/1.css">
+    <script src="js/axios.js"></script>
+
+</head>
+
+<body>
+    <div class="mainbody">
+        <div class="login w894">
+            <div class="login_bg fl"><img
+                    src="http://43.243.128.175//theme/jomoo/zh_cn/shop/images/pic/login_left_bg.jpg" width="490"
+                    height="490"></div>
+            <div class="login_box fr">
+                <!--登录内容区 start-->
+                <h2>账号登录</h2>
+                <form name="" action="#" method="post" id="regform">
+                    <ul>
+                        <li><input type="text" placeholder="账号/手机" class="input w310" name="login_tel" id="login_tel"
+                                value="">
+                            <div id="login_tel_tips" class="Validform_checktip"></div>
+                        </li>
+                        <li><input name="" id="login_password" type="password" placeholder="密码"
+                                class="input w310 password" value="">
+                            <div id="login_pw_tips" class="Validform_checktip"></div>
+                        </li>
+
+                    </ul>
+                    <div class="btn-box">
+                        <div class="clearfix">
+                            <span class="fl"><label><input name="autologin" type="checkbox"
+                                        class="checkbox">记住密码</label></span>
+                            <a class="fr" href="http://www.erkeshop.com/?app_act=member/forget"
+                                style="color: #636363">忘记密码？</a>
+                        </div>
+                        <div class="col clearfix">
+                            <a name="" class="submit" type="button" value="登 录" id="log">登录</a>
+                            <a class="regist" style="text-align:center;" href="注册.html">免费注册</a>
+                        </div>
+                    </div>
+                </form>
+                <!--end 登录内容区-->
+
+                <!--end 注册内容区-->
+            </div>
+            <div class="cb"></div>
+        </div>
+    </div>
+
+</body>
+<script>
+    let sub = document.getElementById('log');
+    let tel = document.getElementById('login_tel');
+    let password = document.getElementById('login_password');
+
+    sub.onclick = function () {
+        let name = tel.value;
+        let passwordVal = password.value;
+        let key1 = false;
+        let key2 = false;
+        axios.get('lib/index.php', {
+            fn: 'get'
+        }).then(data => {
+
+            data = JSON.parse(data);
+            console.log(data);
+            data.forEach(v => {
+                if (v.name == name) {
+                    key1 = true;
+                    // console.log(key1);
+                }
+                if (v.password == passwordVal) {
+                    key2 = true
+                    // console.log(key2);
+                }
+            })
+            // console.log(key1, key2);
+            if (key1 & key2) {
+                alert('登陆成功')
+                localStorage.setItem('name',name)
+                window.open('商城.html')
+            } else {
+                alert('密码或者用户名输入错误')
+            }
+        })
+
+    }
+</script>
+
+</html>

@@ -1,0 +1,135 @@
+function do_login() {
+    var login_tel = $.trim($('#bar_login_tel').val());
+    var login_password = $.trim($('#bar_login_password').val());
+    var is_auto = $('#autologin').is(':checked');
+
+    if (login_tel == '') {
+        layer.msg('请输入手机号', {icon: 0});
+        return false;
+    } else if (!(/^[0-9]{11}$/.test(login_tel))) {
+        layer.msg('手机号输入有误', {icon: 0});
+        return false;
+    }
+
+    if (login_password == '') {
+        layer.msg('密码不能为空', {icon: 0});
+        return false;
+    }
+
+    var parameter = new Object();
+    parameter['username'] = login_tel;
+    parameter['password'] = login_password;
+    parameter['type'] = 'reg';
+    parameter['is_auto'] = is_auto;
+    var url = site_url + "member/login";
+    var params = parameter;
+    Ajax.call(url, params,
+            function(s) {
+                if (s.status == 1) {
+                    // window.location.href = site_url + "?app_act=my/center";
+                    window.location.href=window.location.href;
+                } else {
+                    layer.msg(s.message, {icon: 0});
+                }
+            }, 'POST', 'json');
+}
+
+function bar_check_goods(obj) {
+    var cart_id = $(obj).val();
+    if (typeof $(obj).attr("checked") == "undefined") {
+        //取消勾选状态
+        $.post(site_url + "cart/uncheck", {cart_id: cart_id}, function(data) {
+            bar_refresh_cart();
+        });
+    } else {
+        //增加勾选状态
+        $.post(site_url + "cart/add_check", {cart_id: cart_id}, function(data) {
+            bar_refresh_cart();
+        });
+    }
+}
+
+
+function bar_del_car(id) {
+    if (id != '') {
+        var params = 'id=' + id;
+        var url = site_url + 'cart/del_shopping_car';
+        layer.confirm('确认要删除该商品吗？', {
+            title: '删除商品',
+            btn: ['确定', '关闭']
+        }, function() {
+            $.post(url, params,
+                    function(s) {
+                        var s = $.parseJSON(s);
+                        if (s.status == 1) {
+                            layer.msg('删除成功', {icon: 1});
+                            bar_refresh_cart();
+                        } else {
+                            layer.msg(s.msg, {icon: 0});
+                        }
+                    }
+            );
+        }, function() {
+            return true;
+        });
+    }
+}
+
+//左侧购物车数量加减
+function bar_change_num(id, act, sku) {
+    var num = parseInt($.trim($("#bar_num_" + id).html()));
+    if (act == 'add') {
+        num += 1;
+    } else {
+        num -= 1;
+
+    }
+    if (num < 1) {
+        return false;
+    }
+    $("#bar_num_" + id).html(num);
+    var url = site_url + "cart/compare_sku_inv";
+    var params = 'sku=' + sku + '&app_fmt=json&num=' + num + '&platform_type=1';
+    $.post(url, params,
+            function(s) {
+                var s = $.parseJSON(s);
+                if (s.status == 1) {
+                    var params = 'id=' + id + '&app_fmt=json&num=' + num;
+                    var url = site_url + 'cart/change_num';
+                    $.post(url, params,
+                            function(s) {
+                                var s = $.parseJSON(s);
+                                if (s.status == 1) {
+                                    bar_refresh_cart();
+                                } else {
+                                    layer.msg(s.msg, {icon: 0});
+                                }
+                            });
+                } else {
+                    //如果库存不足，则显示数量减一
+                    var tmp = $("#bar_num_" + id).val();
+                    if (tmp - 1 <= 0) {
+                        $("#bar_num_" + id).val(0);
+                    } else {
+                        $("#bar_num_" + id).val(tmp - 1);
+                    }
+                    layer.msg('库存不足', {icon: 0});
+                    return false;
+                }
+            }
+    );
+}
+
+function Order() {
+    var url = site_url+'cart/check_car';
+    $.post(url, '',
+        function(s) {
+            var s = $.parseJSON(s);
+            if (s.status == 1) {
+                window.location.href = site_url+'order/confirm';
+            } else {
+                layer.msg(s.message, { icon: 0 });
+            }
+        }
+    );
+}    
