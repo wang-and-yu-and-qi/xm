@@ -165,7 +165,139 @@ class Carts {
   }
 
 
+  deleteFn(tar) {
+    // console.log(tar);
+    let trObj = tar.parentNode.parentNode;
+    let id = trObj.getAttribute('goods-id');
+    // console.log(id);
+    let that = this;
   
+    layer.confirm('是否删除？', {
+      btn: ['确定', '取消'] 
+    }, function (index) {
+
+
+      layer.close(index);
+
+   
+      trObj.remove();
+      if ((trObj.children)[0].firstElementChild.checked) {
+        that.totalNP(document.querySelectorAll('.check-one'))
+      }
+      // 更新local中的数据
+      that.modLocal(id);
+
+
+    });
+
+
+  }
+
+  allCCFn(index, eve) {
+    
+    let allStatus = eve.target.checked;
+
+    this.oneChec.forEach(check => {
+      
+      check.checked = allStatus;
+
+    });
+ 
+    this.allChec[index].checked = allStatus
+    this.totalNP();
+  }
+
+  
+  oneFn() {
+    let that = this;
+    let checkNum = 0;
+    let len = this.oneChec.length;
+    this.oneChec.forEach((one, key) => {
+     
+      one.checked && checkNum++;
+      one.onclick = function () {
+      
+        if (this.checked) {
+          
+          checkNum++
+          
+          checkNum == len && (that.allChec[0].checked = true);
+          checkNum == len && (that.allChec[1].checked = true);
+        } else {
+          checkNum--;
+          // 取消全选
+          that.allChec[0].checked = false;
+          that.allChec[1].checked = false;
+        }
+
+        that.totalNP();
+      }
+
+    })
+  }
+
+  // 统计数量和价格
+  totalNP(oneObj = '') {
+
+    this.oneChec = oneObj || this.oneChec;
+   
+    let totalNum = 0;
+    let totalPrice = 0;
+    // 1 循环商品,找出选中的
+    this.oneChec.forEach(goods => {
+      // console.log(goods);
+      if (goods.checked) { // 判断选中的商品
+        let goodsTrObj = goods.parentNode.parentNode;
+   
+        let num = goodsTrObj.querySelector('.count-input').value - 0;
+        let subT = goodsTrObj.querySelector('.subtotal').innerHTML - 0;
+      
+        totalNum += num;
+        totalPrice += subT;
+      }
+    });
+   
+    this.$('#selectedTotal').innerHTML = totalNum;
+    this.$('#priceTotal').innerHTML = totalPrice;
+
+  }
+
+  
+  getCartGoods() {
+    let cartG = localStorage.getItem('cart');
+
+    let html = '';
+    JSON.parse(cartG).forEach(data => {
+ 
+      html += `<tr goods-id=${data.id}>
+     <td class="checkbox">
+       <input class="check-one check" type="checkbox" />
+     </td>
+     <td class="goods">
+       <img src="${data.src}" alt="" />
+       <span>${data.name}</span>
+     </td>
+     <td class="size">${data.size}</td>
+     <td class="size">${data.style}</td>
+     <td class="price">${data.price}</td>
+     <td class="count">
+       <span class="reduce">-</span>
+       <input class="count-input" type="text" value="${data.num}" />
+       <span class="add">+</span>
+     </td>
+     <td class="subtotal">${data.price * data.num}</td>
+     <td class="operation">
+       <span class="delete">删除</span>
+     </td>
+   </tr>`;
+    });
+    
+    this.$('tbody').innerHTML = html;
+  }
+
+  $(tag) {
+    return document.querySelector(tag);
+  }
 }
 
 new Carts;
