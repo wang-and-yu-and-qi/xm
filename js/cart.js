@@ -93,7 +93,7 @@ class Carts {
       let that = this;
       // 弹出框,是否删除
       layer.confirm('是否从购物车中移除该商品？', {
-        btn: ['确定', '取消'] //按钮
+        btn: ['确定', '取消'] 
       }, function (index) {
   
   

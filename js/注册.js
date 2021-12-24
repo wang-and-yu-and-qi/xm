@@ -18,7 +18,7 @@ userObj.onblur = function () {
         this.nextElementSibling.innerHTML = '';
         x = true;
     } else {
-        this.nextElementSibling.innerHTML = '用户名不合法';
+        this.nextElementSibling.innerHTML = '手机号错误';
         x = false;
     }
 }
@@ -92,7 +92,7 @@ butn.onclick = function () {
         }).then(data => {
 
             if (data == 1) location.reload();
-
+            
         });
           
     }
